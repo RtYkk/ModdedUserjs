@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter: GET THE BIRD BACK ENFORCE 還我鳥來!!! - Mod
 // @namespace    https://www.plurk.com/SpyMomiji
-// @version      1.1.9
+// @version      1.2.0
 // @description  替換會經常看到的那個沒設計感的東西...我會不會太閒?
 // @author       SpyMomiji
 // @author       Whalko
@@ -58,25 +58,18 @@
     }
 
     window.onload = function() {
-    new GeneralInterval( function(checked){
-        var target = Array.from(document.getElementsByTagName("link")).filter( i=>
-            !checked.has(i) && checked.add(i) &&
-            i.rel=="shortcut icon"
-        )[0];
-
-        if(!( target ))
-            return document.readyState == 'complete' && this.stop();
-
-        // 强制浏览器忽略缓存并重新从服务器获取 favicon
-        target.href = target.href + '?v=' + Math.random();
-
-        // 等待一段时间以确保浏览器已经获取了新的 favicon，然后再进行替换
-        setTimeout(function() {
+        new GeneralInterval( function(checked){
+            var target = Array.from(document.getElementsByTagName("link")).filter( i=>
+                !checked.has(i) && checked.add(i) &&
+                i.rel=="shortcut icon"
+            )[0];
+    
+            if(!( target ))
+                return document.readyState == 'complete' && this.stop();
+    
             target.href = orig_favicon;
-        }, 1000);
-
-        this.stop()
-    }, {attr: new Set() })
+            this.stop()
+        }, {attr: new Set() })
     }
 
     var icon_stage_1 = ()=> new GeneralInterval( function(){
@@ -131,4 +124,21 @@
         var match = document.title.match(/(.*)\/ X$/);
         match&&(this.pageTitle = document.title = match[1] + '/ Twitter');
     }, {interval: 100 })
+
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                // 检查 favicon 是否已更改
+                var favicon = Array.from(document.getElementsByTagName("link")).find(i => i.rel === "shortcut icon");
+                if (favicon && favicon.href !== orig_favicon) {
+                    // 如果 favicon 已更改，将其设置回原始的
+                    favicon.href = orig_favicon;
+                }
+            }
+        });
+    });
+
+    // 开始监视文档头部的更改
+    observer.observe(document.head, { childList: true });
+
 })();
