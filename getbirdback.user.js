@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter: GET THE BIRD BACK ENFORCE 還我鳥來!!! - Mod
 // @namespace    https://www.plurk.com/SpyMomiji
-// @version      1.1.5
+// @version      1.1.8
 // @description  替換會經常看到的那個沒設計感的東西...我會不會太閒?
 // @author       SpyMomiji
 // @author       Whalko
@@ -124,10 +124,4 @@
         var match = document.title.match(/(.*)\/ X$/);
         match&&(this.pageTitle = document.title = match[1] + '/ Twitter');
     }, {interval: 100 })
-
-	setInterval(function() {
-        if (window.location.href.includes("x.com")) {
-            window.location.replace(window.location.href.replace("x.com", "twitter.com"));
-        }
-    }, 1000);
 })();
