@@ -58,18 +58,25 @@
     }
 
     window.onload = function() {
-        new GeneralInterval( function(checked){
-            var target = Array.from(document.getElementsByTagName("link")).filter( i=>
-                !checked.has(i) && checked.add(i) &&
-                i.rel=="shortcut icon"
-            )[0];
-    
-            if(!( target ))
-                return document.readyState == 'complete' && this.stop();
-    
+    new GeneralInterval( function(checked){
+        var target = Array.from(document.getElementsByTagName("link")).filter( i=>
+            !checked.has(i) && checked.add(i) &&
+            i.rel=="shortcut icon"
+        )[0];
+
+        if(!( target ))
+            return document.readyState == 'complete' && this.stop();
+
+        // 强制浏览器忽略缓存并重新从服务器获取 favicon
+        target.href = target.href + '?v=' + Math.random();
+
+        // 等待一段时间以确保浏览器已经获取了新的 favicon，然后再进行替换
+        setTimeout(function() {
             target.href = orig_favicon;
-            this.stop()
-        }, {attr: new Set() })
+        }, 1000);
+
+        this.stop()
+    }, {attr: new Set() })
     }
 
     var icon_stage_1 = ()=> new GeneralInterval( function(){
