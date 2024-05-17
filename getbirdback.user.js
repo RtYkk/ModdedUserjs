@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter: GET THE BIRD BACK ENFORCE 還我鳥來!!! - Mod
 // @namespace    https://www.plurk.com/SpyMomiji
-// @version      1.1.8
+// @version      1.1.9
 // @description  替換會經常看到的那個沒設計感的東西...我會不會太閒?
 // @author       SpyMomiji
 // @author       Whalko
